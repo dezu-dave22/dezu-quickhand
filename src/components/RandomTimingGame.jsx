@@ -331,7 +331,7 @@ const RandomTimingGame = () => {
                         停止
                     </button>
                     <button
-                        className="bg-green-500 text-white px-4 py-2 rounded disabled:opacity-50 flex-1"
+                        className="bg-green-500 text-white px-4 py-2 rounded disabled:opacity-50 flex-1 "
                         onClick={handleReset}
                         disabled={isMoving}
                     >
