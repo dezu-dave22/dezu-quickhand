@@ -45,8 +45,8 @@ const RandomTimingGame = () => {
     const [nextMatchDelay, setNextMatchDelay] = useState(2000);
     const [direction, setDirection] = useState({x: 1, y: 1});
     const SPEED = 3;
-    const BOUNDARY_MARGIN = 30;
-    const BOUNDARY_MAX = 75;
+    const BOUNDARY_MARGIN = 10;
+    const BOUNDARY_MAX = 80;
 
     const generateNewMatchTime = useCallback(() => {
         const delay = Math.random() * 5000;
@@ -251,7 +251,7 @@ const RandomTimingGame = () => {
                         onClick={() => handleImageClick(zushan, zushanOutline)}>
                         <img src={zushan} alt="Example 1"
                              className="w-32 h-32  rounded-lg object-contain flex-shrink-0"/>
-                        <span className="text-center font-bold">築山</span>
+                        <span className="text-center font-bold text-2xl">築山</span>
                     </div>
 
                     <div
@@ -259,48 +259,48 @@ const RandomTimingGame = () => {
                         onClick={() => handleImageClick(zushu, zushuOutline)}
                     >
                         <img src={zushu} alt="Example 1" className="w-32 h-32  object-contain rounded-lg"/>
-                        <span className="text-center font-bold">築水</span>
+                        <span className="text-center font-bold text-2xl">築水</span>
                     </div>
                     <div
                         className=" bg-gray-200 flex flex-col items-center justify-center hover:cursor-pointer hover:scale-105 rounded-lg"
                         onClick={() => handleImageClick(zusong, zusongOutline)}
                     >
                         <img src={zusong} alt="Example 1" className="w-32 h-32  object-contain rounded-lg"/>
-                        <span className="text-center font-bold">築松</span>
+                        <span className="text-center font-bold text-2xl">築松</span>
                     </div>
                     <div
                         className=" bg-gray-200 flex flex-col items-center justify-center hover:cursor-pointer hover:scale-105 rounded-lg"
                         onClick={() => handleImageClick(zusu, zusuOutline)}
                     >
                         <img src={zusu} alt="Example 1" className="w-32 h-32  object-contain rounded-lg"/>
-                        <span className="text-center font-bold">築樹</span>
+                        <span className="text-center font-bold text-2xl">築樹</span>
                     </div>
                     <div
                         className=" bg-gray-200 flex flex-col items-center justify-center hover:cursor-pointer hover:scale-105 rounded-lg"
                         onClick={() => handleImageClick(zutain, zutainOutline)}>
                         <img src={zutain} alt="Example 1" className="w-32 h-32  object-contain rounded-lg"/>
-                        <span className="text-center font-bold">築田</span>
+                        <span className="text-center font-bold text-2xl">築田</span>
                     </div>
                     <div
                         className=" bg-gray-200 flex flex-col items-center justify-center hover:cursor-pointer hover:scale-105 rounded-lg"
                         onClick={() => handleImageClick(zuxing, zuxingOutline)}
                     >
                         <img src={zuxing} alt="Example 1" className="w-32 h-32  object-contain rounded-lg"/>
-                        <span className="text-center font-bold">築星</span>
+                        <span className="text-center font-bold text-2xl">築星</span>
                     </div>
                     <div
                         className=" bg-gray-200 flex flex-col items-center justify-center hover:cursor-pointer hover:scale-105 rounded-lg "
                         onClick={() => handleImageClick(zuyin, zuyinOutline)}
                     >
                         <img src={zuyin} alt="Example 1" className="w-32 h-32  object-contain rounded-lg"/>
-                        <span className="text-center font-bold">築櫻</span>
+                        <span className="text-center font-bold text-2xl">築櫻</span>
                     </div>
                     <div
                         className=" bg-gray-200 flex flex-col items-center justify-center hover:cursor-pointer hover:scale-105 rounded-lg"
                         onClick={() => handleImageClick(zuyuang, zuyangOutline)}
                     >
                         <img src={zuyuang} alt="Example 1" className="w-32 h-32  object-contain rounded-lg"/>
-                        <span className="text-center font-bold">築院</span>
+                        <span className="text-center font-bold text-2xl">築院</span>
                     </div>
                 </div>
             </div>
@@ -350,42 +350,42 @@ const RandomTimingGame = () => {
                         onClick={() => handleImageClick(zuchang, zuchangOutline)}
                     >
                         <img src={zuchang} alt="Example 1" className="w-32 h-32 object-contain rounded-lg"/>
-                        <span className="text-center font-bold">築泉</span>
+                        <span className="text-center font-bold text-2xl">築泉</span>
                     </div>
                     <div
                         className=" bg-gray-200 flex flex-col items-center justify-center hover:cursor-pointer hover:scale-105 rounded-lg"
                         onClick={() => handleImageClick(zufan, zufanOutline)}
                     >
                         <img src={zufan} alt="Example 1" className="w-32 h-32 object-contain rounded-lg"/>
-                        <span className="text-center font-bold">築帆</span>
+                        <span className="text-center font-bold text-2xl">築帆</span>
                     </div>
                     <div
                         className=" bg-gray-200 flex flex-col items-center justify-center hover:cursor-pointer hover:scale-105 rounded-lg "
                         onClick={() => handleImageClick(zufon, zufonOutline)}
                     >
                         <img src={zufon} alt="Example 1" className="w-32 h-32 object-contain rounded-lg "/>
-                        <span className="text-center font-bold">築楓</span>
+                        <span className="text-center font-bold text-2xl">築楓</span>
                     </div>
                     <div
                         className=" bg-gray-200 flex flex-col items-center justify-center hover:cursor-pointer hover:scale-105 rounded-lg"
                         onClick={() => handleImageClick(zugang, zugangOutline)}
                     >
                         <img src={zugang} alt="Example 1" className="w-32 h-32 object-contain rounded-lg"/>
-                        <span className="text-center font-bold">築港</span>
+                        <span className="text-center font-bold text-2xl">築港</span>
                     </div>
                     <div
                         className=" bg-gray-200 flex flex-col items-center justify-center hover:cursor-pointer hover:scale-105 rounded-lg"
                         onClick={() => handleImageClick(zulan, zulanOutline)}
                     >
                         <img src={zulan} alt="Example 1" className="w-32 h-32 object-contain rounded-lg"/>
-                        <span className="text-center font-bold">築蘭</span>
+                        <span className="text-center font-bold text-2xl">築蘭</span>
                     </div>
                     <div
                         className=" bg-gray-200 flex flex-col items-center justify-center hover:cursor-pointer hover:scale-105 rounded-lg"
                         onClick={() => handleImageClick(zumi, zumiOutline)}
                     >
                         <img src={zumi} alt="Example 1" className="w-32 h-32 object-contain rounded-lg"/>
-                        <span className="text-center font-bold">築米</span>
+                        <span className="text-center font-bold text-2xl">築米</span>
                     </div>
                     <div
                         className="col-span-2 w-100 h-50  flex flex-col items-center justify-center   rounded-lg"
