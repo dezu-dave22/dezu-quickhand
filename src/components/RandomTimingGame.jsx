@@ -45,8 +45,8 @@ const RandomTimingGame = () => {
     const [nextMatchDelay, setNextMatchDelay] = useState(2000);
     const [direction, setDirection] = useState({x: 1, y: 1});
     const SPEED = 3;
-    const BOUNDARY_MARGIN = 10;
-    const BOUNDARY_MAX = 80;
+    const BOUNDARY_MARGIN = 0;
+    const BOUNDARY_MAX = 75;
 
     const generateNewMatchTime = useCallback(() => {
         const delay = Math.random() * 5000;
