@@ -217,8 +217,8 @@ const RandomTimingGame = () => {
             Math.pow(pos.y - targetPos.y, 2)
         );
         console.log(distance);
-        if (distance > 20) return 0
-        return (100 - Math.round(distance))
+        if (distance > 10) return 0
+        return (100 - Math.round(distance)*2)
     }, [targetPos]);
 
     const handleStop = () => {
