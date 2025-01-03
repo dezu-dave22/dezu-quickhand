@@ -216,7 +216,7 @@ const RandomTimingGame = () => {
             Math.pow(pos.x - targetPos.x, 2) +
             Math.pow(pos.y - targetPos.y, 2)
         );
-        console.log(distance);
+        console.log("距離: ", distance);
         if (distance > 10) return 0
         return (100 - Math.round(distance)*2)
     }, [targetPos]);
@@ -310,13 +310,23 @@ const RandomTimingGame = () => {
                     <p className="text-xl m-2">目前分數: {score}</p>
                 </div>
 
-                <div className="relative w-3/4 aspect-square mx-auto mb-4 border-2 border-gray-300">
-                    <svg className="absolute inset-0" viewBox="0 0 100 100"
+                <div className="relative w-[540px] h-[540px] mx-auto mb-4 border-2 border-gray-300">
+                    <svg 
+                        className="absolute inset-0 w-full h-full" 
+                        viewBox="0 0 100 100"
+                        preserveAspectRatio="xMidYMid meet"
+                        width="540"
+                        height="540"
                     >
-                    <CustomHouse {...targetPos} isTarget={true}/>
+                        <CustomHouse {...targetPos} isTarget={true}/>
                     </svg>
 
-                    <svg className="absolute inset-0" viewBox="0 0 100 100"
+                    <svg 
+                        className="absolute inset-0 w-full h-full" 
+                        viewBox="0 0 100 100"
+                        preserveAspectRatio="xMidYMid meet"
+                        width="540"
+                        height="540"
                     >
                         <ＭoveHouse {...position} isTarget={false}/>
                     </svg>
