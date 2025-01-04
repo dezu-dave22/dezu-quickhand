@@ -44,7 +44,7 @@ const RandomTimingGame = () => {
     const [lastMatchTime, setLastMatchTime] = useState(Date.now());
     const [nextMatchDelay, setNextMatchDelay] = useState(2000);
     const [direction, setDirection] = useState({x: 1, y: 1});
-    const SPEED = 3;
+    const SPEED = 2;
     const BOUNDARY_MARGIN = 0;
     const BOUNDARY_MAX = 75;
 
