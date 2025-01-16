@@ -90,8 +90,10 @@ const RandomTimingGame = () => {
         handleReset()
     };
     // eslint-disable-next-line react/prop-types
-    const ＭoveHouse = ({x, y}) => (
-        <g transform={`translate(${x},${y}) scale(0.1,0.1)`}>
+    const MoveHouse = ({x, y, funMode}) => (
+        <g transform={funMode ? 
+            `translate(${x-12.5},${y-12.5}) scale(0.1,0.1)` : 
+            `translate(${x},${y}) scale(0.1,0.1)`}>
             <image
                 href={currentImages.building}
                 preserveAspectRatio="xMidYMid meet"
@@ -101,8 +103,10 @@ const RandomTimingGame = () => {
         </g>
     );
 
-    const CustomHouse = ({x, y}) => (
-        <g transform={`translate(${x},${y}) scale(0.1,0.1)`}>
+    const CustomHouse = ({x, y, funMode}) => (
+        <g transform={funMode ? 
+            `translate(${x-12.5},${y-12.5}) scale(0.1,0.1)` : 
+            `translate(${x},${y}) scale(0.1,0.1)`}>
             <image
                 href={currentImages.moveBuilding}
                 preserveAspectRatio="xMidYMid meet"
@@ -220,14 +224,14 @@ const RandomTimingGame = () => {
     };
 
     const calculateScore = useCallback((pos) => {
-
+        // 直接計算距離，不需要調整位置
         const distance = Math.sqrt(
             Math.pow(pos.x - targetPos.x, 2) +
             Math.pow(pos.y - targetPos.y, 2)
         );
-        console.log("距離: ", distance);
-        if (distance > 10) return 60
-        return (100 - Math.round(distance)*2)
+        
+        if (distance > 10) return 60;
+        return (100 - Math.round(distance) * 2);
     }, [targetPos]);
 
     const handleStop = () => {
@@ -242,11 +246,27 @@ const RandomTimingGame = () => {
 
     const handleReset = () => {
         setIsMoving(true);
-        setPosition({x: 50, y: 50});
+        // 在歡樂模式下調整初始位置
+        if (funMode) {
+            setPosition({
+                x: Math.max(BOUNDARY_MARGIN + 12.5, Math.min(BOUNDARY_MAX + 12.5, 50)),
+                y: Math.max(BOUNDARY_MARGIN + 12.5, Math.min(BOUNDARY_MAX + 12.5, 50))
+            });
+        } else {
+            setPosition({
+                x: 50,
+                y: 50
+            });
+        }
         setScore(0);
-        const targetX = BOUNDARY_MARGIN + Math.random() * (BOUNDARY_MAX - BOUNDARY_MARGIN);
-        const targetY = BOUNDARY_MARGIN + Math.random() * (BOUNDARY_MAX - BOUNDARY_MARGIN);
+        
+        // 在歡樂模式下調整目標位置的範圍
+        const minBoundary = funMode ? BOUNDARY_MARGIN + 12.5 : BOUNDARY_MARGIN;
+        const maxBoundary = funMode ? BOUNDARY_MAX + 12.5 : BOUNDARY_MAX;
+        const targetX = minBoundary + Math.random() * (maxBoundary - minBoundary);
+        const targetY = minBoundary + Math.random() * (maxBoundary - minBoundary);
         setTargetPos({x: targetX, y: targetY});
+        
         generateNewMatchTime();
         const angle = Math.random() * Math.PI * 2;
         setDirection({
@@ -259,18 +279,24 @@ const RandomTimingGame = () => {
         if (!funMode) return;
         setIsDragging(true);
         
-        // 獲取SVG元素的位置和大小
         const svg = e.currentTarget;
         const rect = svg.getBoundingClientRect();
         
-        // 計算滑鼠在SVG內的相對位置
         const x = ((e.clientX - rect.left) / rect.width) * 100;
         const y = ((e.clientY - rect.top) / rect.height) * 100;
         
-        setPosition({
-            x: Math.max(BOUNDARY_MARGIN, Math.min(BOUNDARY_MAX, x)),
-            y: Math.max(BOUNDARY_MARGIN, Math.min(BOUNDARY_MAX, y))
-        });
+        // 在歡樂模式下調整邊界，右下方增加 12.5
+        if (funMode) {
+            setPosition({
+                x: Math.max(BOUNDARY_MARGIN + 12.5, Math.min(BOUNDARY_MAX + 12.5, x)),
+                y: Math.max(BOUNDARY_MARGIN + 12.5, Math.min(BOUNDARY_MAX + 12.5, y))
+            });
+        } else {
+            setPosition({
+                x: Math.max(BOUNDARY_MARGIN, Math.min(BOUNDARY_MAX, x)),
+                y: Math.max(BOUNDARY_MARGIN, Math.min(BOUNDARY_MAX, y))
+            });
+        }
     }, [funMode]);
 
     const handleMouseMove = useCallback((e) => {
@@ -282,10 +308,18 @@ const RandomTimingGame = () => {
         const x = ((e.clientX - rect.left) / rect.width) * 100;
         const y = ((e.clientY - rect.top) / rect.height) * 100;
         
-        setPosition({
-            x: Math.max(BOUNDARY_MARGIN, Math.min(BOUNDARY_MAX, x)),
-            y: Math.max(BOUNDARY_MARGIN, Math.min(BOUNDARY_MAX, y))
-        });
+        // 在歡樂模式下調整邊界，右下方增加 12.5
+        if (funMode) {
+            setPosition({
+                x: Math.max(BOUNDARY_MARGIN + 12.5, Math.min(BOUNDARY_MAX + 12.5, x)),
+                y: Math.max(BOUNDARY_MARGIN + 12.5, Math.min(BOUNDARY_MAX + 12.5, y))
+            });
+        } else {
+            setPosition({
+                x: Math.max(BOUNDARY_MARGIN, Math.min(BOUNDARY_MAX, x)),
+                y: Math.max(BOUNDARY_MARGIN, Math.min(BOUNDARY_MAX, y))
+            });
+        }
     }, [funMode, isDragging]);
 
     const handleMouseUp = useCallback(() => {
@@ -378,7 +412,7 @@ const RandomTimingGame = () => {
                         width="540"
                         height="540"
                     >
-                        <CustomHouse {...targetPos} isTarget={true}/>
+                        <CustomHouse {...targetPos} funMode={funMode} isTarget={true}/>
                     </svg>
 
                     <svg 
@@ -393,7 +427,7 @@ const RandomTimingGame = () => {
                         onMouseLeave={handleMouseUp}
                         style={{ cursor: funMode ? 'grab' : 'default' }}
                     >
-                        <ＭoveHouse {...position} isTarget={false}/>
+                        <MoveHouse {...position} funMode={funMode} isTarget={false}/>
                     </svg>
                 </div>
 
