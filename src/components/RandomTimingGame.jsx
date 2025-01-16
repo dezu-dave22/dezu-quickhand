@@ -552,7 +552,10 @@ const RandomTimingGame = () => {
             {showRewardEffect && (
                 <div 
                     className="fixed inset-0 flex items-center justify-center z-50 animate-fadeIn cursor-pointer"
-                    onClick={() => setShowRewardEffect(false)}
+                    onClick={() => {
+                        setShowRewardEffect(false);
+                        handleReset();
+                    }}
                 >
                     {/* 星空背景 */}
                     <div className="absolute inset-0 bg-gradient-to-b from-purple-900 via-blue-900 to-black opacity-95">
