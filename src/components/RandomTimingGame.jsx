@@ -44,9 +44,14 @@ const RandomTimingGame = () => {
     const [lastMatchTime, setLastMatchTime] = useState(Date.now());
     const [nextMatchDelay, setNextMatchDelay] = useState(2000);
     const [direction, setDirection] = useState({x: 1, y: 1});
-    const SPEED = 1.5;
     const BOUNDARY_MARGIN = 0;
     const BOUNDARY_MAX = 75;
+    const [showSpeedModal, setShowSpeedModal] = useState(false);
+    const [speed, setSpeed] = useState(1.5);
+    const [showRewardEffect, setShowRewardEffect] = useState(false);
+    
+    // 修改速度選項生成方式
+    const speedOptions = Array.from({length: 9}, (_, i) => 1 + i * 0.25);
 
     const generateNewMatchTime = useCallback(() => {
         const delay = Math.random() * 5000;
@@ -111,10 +116,10 @@ const RandomTimingGame = () => {
         setTargetPos({x: targetX, y: targetY});
         const angle = Math.random() * Math.PI * 2;
         setDirection({
-            x: Math.cos(angle) * SPEED,
-            y: Math.sin(angle) * SPEED
+            x: Math.cos(angle) * speed,
+            y: Math.sin(angle) * speed
         });
-    }, []);
+    }, [speed]);
 
     useEffect(() => {
         let animationFrame;
@@ -170,8 +175,8 @@ const RandomTimingGame = () => {
 
                     const magnitude = Math.sqrt(newDirection.x * newDirection.x + newDirection.y * newDirection.y);
                     if (magnitude !== 0) {
-                        newDirection.x = (newDirection.x / magnitude) * SPEED;
-                        newDirection.y = (newDirection.y / magnitude) * SPEED;
+                        newDirection.x = (newDirection.x / magnitude) * speed;
+                        newDirection.y = (newDirection.y / magnitude) * speed;
                     }
 
                     if (newDirection.x !== direction.x || newDirection.y !== direction.y) {
@@ -197,7 +202,7 @@ const RandomTimingGame = () => {
 
         animationFrame = requestAnimationFrame(animate);
         return () => cancelAnimationFrame(animationFrame);
-    }, [isMoving, targetPos, lastMatchTime, nextMatchDelay, direction]);
+    }, [isMoving, targetPos, lastMatchTime, nextMatchDelay, direction, speed]);
 
     const calculatePathToTarget = (currentPos, targetPos) => {
         const dx = targetPos.x - currentPos.x;
@@ -205,8 +210,8 @@ const RandomTimingGame = () => {
         const distance = Math.sqrt(dx * dx + dy * dy);
         if (distance === 0) return direction;
         return {
-            x: (dx / distance) * SPEED,
-            y: (dy / distance) * SPEED
+            x: (dx / distance) * speed,
+            y: (dy / distance) * speed
         };
     };
 
@@ -217,7 +222,7 @@ const RandomTimingGame = () => {
             Math.pow(pos.y - targetPos.y, 2)
         );
         console.log("距離: ", distance);
-        if (distance > 10) return 0
+        if (distance > 10) return 60
         return (100 - Math.round(distance)*2)
     }, [targetPos]);
 
@@ -225,6 +230,10 @@ const RandomTimingGame = () => {
         setIsMoving(false);
         const newScore = calculateScore(position);
         setScore(newScore);
+        
+        if (newScore >= 90) {
+            setShowRewardEffect(true);
+        }
     };
 
     const handleReset = () => {
@@ -237,8 +246,8 @@ const RandomTimingGame = () => {
         generateNewMatchTime();
         const angle = Math.random() * Math.PI * 2;
         setDirection({
-            x: Math.cos(angle) * SPEED,
-            y: Math.sin(angle) * SPEED
+            x: Math.cos(angle) * speed,
+            y: Math.sin(angle) * speed
         });
     };
 
@@ -388,13 +397,79 @@ const RandomTimingGame = () => {
                         <span className="text-center font-bold text-2xl">築米</span>
                     </div>
                     <div
-                        className="col-span-2 w-100 h-50  flex flex-col items-center justify-center   rounded-lg"
-                        onClick={() => handleImageClick(zumi, zumiOutline)}
+                        className="col-span-2 w-100 h-50 flex flex-col items-center justify-center rounded-lg"
                     >
-                        <img src={ground} alt="Example 1" className="w-full h-full object-contain rounded-lg"/>
+                        <img 
+                            src={ground} 
+                            alt="Example 1" 
+                            className="w-full h-full object-contain rounded-lg cursor-pointer"
+                            onClick={() => setShowSpeedModal(true)}
+                        />
                     </div>
                 </div>
             </div>
+
+            {/* 添加速度調整Modal */}
+            {showSpeedModal && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                    <div className="bg-white p-6 rounded-lg min-w-[200px]">
+                        <h3 className="text-xl mb-4 font-bold">調整速度</h3>
+                        <select 
+                            value={speed}
+                            onChange={(e) => setSpeed(parseFloat(e.target.value))}
+                            className="w-full p-2 border border-gray-300 rounded mb-4"
+                        >
+                            {speedOptions.map(value => (
+                                <option key={value} value={value}>
+                                    {value.toFixed(2)}倍速
+                                </option>
+                            ))}
+                        </select>
+                        <div className="flex justify-end">
+                            <button 
+                                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                                onClick={() => setShowSpeedModal(false)}
+                            >
+                                確定
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* 修改獎勵特效 */}
+            {showRewardEffect && (
+                <div 
+                    className="fixed inset-0 flex items-center justify-center z-50 animate-fadeIn cursor-pointer"
+                    onClick={() => setShowRewardEffect(false)}
+                >
+                    {/* 星空背景 */}
+                    <div className="absolute inset-0 bg-gradient-to-b from-purple-900 via-blue-900 to-black opacity-95">
+                        {/* 生成50個隨機位置的星星 */}
+                        {Array.from({ length: 50 }).map((_, i) => (
+                            <div
+                                key={i}
+                                className="absolute w-1 h-1 bg-white rounded-full animate-twinkle"
+                                style={{
+                                    left: `${Math.random() * 100}%`,
+                                    top: `${Math.random() * 100}%`,
+                                    animationDelay: `${Math.random() * 2}s`
+                                }}
+                            />
+                        ))}
+                    </div>
+
+                    {/* 中央獎勵文字 */}
+                    <div className="relative text-center animate-floatUp">
+                        <div className="text-6xl font-bold text-yellow-300 mb-4 animate-pulse">
+                            恭喜獲得高分！
+                        </div>
+                        <div className="text-4xl text-white mb-8 animate-pulse">
+                            獲得一顆「星空棒棒糖」
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
 
     );
