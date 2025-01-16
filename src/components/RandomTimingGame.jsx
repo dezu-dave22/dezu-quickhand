@@ -49,6 +49,8 @@ const RandomTimingGame = () => {
     const [showSpeedModal, setShowSpeedModal] = useState(false);
     const [speed, setSpeed] = useState(1.5);
     const [showRewardEffect, setShowRewardEffect] = useState(false);
+    const [isDragging, setIsDragging] = useState(false);
+    const [funMode, setFunMode] = useState(false);
     
     // 修改速度選項生成方式
     const speedOptions = Array.from({length: 9}, (_, i) => 1 + i * 0.25);
@@ -122,6 +124,8 @@ const RandomTimingGame = () => {
     }, [speed]);
 
     useEffect(() => {
+        if (funMode) return;
+        
         let animationFrame;
         let lastTime = Date.now();
         let matchStarted = false;
@@ -202,7 +206,7 @@ const RandomTimingGame = () => {
 
         animationFrame = requestAnimationFrame(animate);
         return () => cancelAnimationFrame(animationFrame);
-    }, [isMoving, targetPos, lastMatchTime, nextMatchDelay, direction, speed]);
+    }, [isMoving, targetPos, lastMatchTime, nextMatchDelay, direction, speed, funMode]);
 
     const calculatePathToTarget = (currentPos, targetPos) => {
         const dx = targetPos.x - currentPos.x;
@@ -250,6 +254,53 @@ const RandomTimingGame = () => {
             y: Math.sin(angle) * speed
         });
     };
+
+    const handleMouseDown = useCallback((e) => {
+        if (!funMode) return;
+        setIsDragging(true);
+        
+        // 獲取SVG元素的位置和大小
+        const svg = e.currentTarget;
+        const rect = svg.getBoundingClientRect();
+        
+        // 計算滑鼠在SVG內的相對位置
+        const x = ((e.clientX - rect.left) / rect.width) * 100;
+        const y = ((e.clientY - rect.top) / rect.height) * 100;
+        
+        setPosition({
+            x: Math.max(BOUNDARY_MARGIN, Math.min(BOUNDARY_MAX, x)),
+            y: Math.max(BOUNDARY_MARGIN, Math.min(BOUNDARY_MAX, y))
+        });
+    }, [funMode]);
+
+    const handleMouseMove = useCallback((e) => {
+        if (!funMode || !isDragging) return;
+        
+        const svg = e.currentTarget;
+        const rect = svg.getBoundingClientRect();
+        
+        const x = ((e.clientX - rect.left) / rect.width) * 100;
+        const y = ((e.clientY - rect.top) / rect.height) * 100;
+        
+        setPosition({
+            x: Math.max(BOUNDARY_MARGIN, Math.min(BOUNDARY_MAX, x)),
+            y: Math.max(BOUNDARY_MARGIN, Math.min(BOUNDARY_MAX, y))
+        });
+    }, [funMode, isDragging]);
+
+    const handleMouseUp = useCallback(() => {
+        if (!isDragging) return;
+        setIsDragging(false);
+        
+        // 計算分數
+        const newScore = calculateScore(position);
+        setScore(newScore);
+        
+        // 檢查是否達到特效條件
+        if (newScore >= 90) {
+            setShowRewardEffect(true);
+        }
+    }, [isDragging, position, calculateScore]);
 
     return (
         <div className="flex w-screen h-screen ">
@@ -336,6 +387,11 @@ const RandomTimingGame = () => {
                         preserveAspectRatio="xMidYMid meet"
                         width="540"
                         height="540"
+                        onMouseDown={handleMouseDown}
+                        onMouseMove={handleMouseMove}
+                        onMouseUp={handleMouseUp}
+                        onMouseLeave={handleMouseUp}
+                        style={{ cursor: funMode ? 'grab' : 'default' }}
                     >
                         <ＭoveHouse {...position} isTarget={false}/>
                     </svg>
@@ -425,6 +481,27 @@ const RandomTimingGame = () => {
                                 </option>
                             ))}
                         </select>
+                        
+                        {/* 歡樂模式開關 */}
+                        <div className="flex items-center gap-2 mb-4">
+                            <label className="relative inline-flex items-center cursor-pointer">
+                                <input
+                                    type="checkbox"
+                                    className="sr-only peer"
+                                    checked={funMode}
+                                    onChange={(e) => {
+                                        setFunMode(e.target.checked);
+                                        if (!e.target.checked) {
+                                            // 退出歡樂模式時重置位置
+                                            setPosition({x: 50, y: 50});
+                                        }
+                                    }}
+                                />
+                                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                                <span className="ml-3 text-sm font-medium text-gray-900">歡樂模式</span>
+                            </label>
+                        </div>
+
                         <div className="flex justify-end">
                             <button 
                                 className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
