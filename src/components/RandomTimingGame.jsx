@@ -44,7 +44,7 @@ const RandomTimingGame = () => {
     const [lastMatchTime, setLastMatchTime] = useState(Date.now());
     const [nextMatchDelay, setNextMatchDelay] = useState(2000);
     const [direction, setDirection] = useState({x: 1, y: 1});
-    const SPEED = 2;
+    const SPEED = 1.5;
     const BOUNDARY_MARGIN = 0;
     const BOUNDARY_MAX = 75;
 
@@ -245,7 +245,7 @@ const RandomTimingGame = () => {
     return (
         <div className="flex w-screen h-screen ">
             <div className="bg-amber-400 p-5 flex-shrink-0  flex-1">
-                <div className="grid grid-cols-2  gap-4 auto-rows-min">
+                <div className="grid grid-cols-2  gap-10 auto-rows-min">
                     <div
                         className=" bg-gray-200 flex flex-col items-center justify-center hover:cursor-pointer hover:scale-105 rounded-lg"
                         onClick={() => handleImageClick(zushan, zushanOutline)}>
@@ -334,27 +334,17 @@ const RandomTimingGame = () => {
 
                 <div className="flex justify-center gap-5 w-1/2 mx-auto">
                     <button
-                        className="bg-blue-500 text-white px-4 py-2 rounded disabled:opacity-50 flex-1"
-                        onClick={handleStop}
-                        disabled={!isMoving}
+                        className="bg-blue-500 text-white px-6 py-4 rounded flex-1"
+                        onClick={() => isMoving ? handleStop() : handleReset()}
                     >
-                        停止
-                    </button>
-                    <button
-                        className="bg-green-500 text-white px-4 py-2 rounded disabled:opacity-50 flex-1 "
-                        onClick={handleReset}
-                        disabled={isMoving}
-                    >
-                        重新開始
+                        { '按我'}
                     </button>
                 </div>
 
-                <div className="mt-4 text-sm text-gray-600">
-                    按空白鍵停止
-                </div>
+               
             </div>
             <div className="bg-amber-400 p-5  flex-1">
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 gap-10">
                     <div
                         className=" bg-gray-200 flex flex-col  items-center justify-center hover:cursor-pointer hover:scale-105 rounded-lg"
                         onClick={() => handleImageClick(zuchang, zuchangOutline)}
