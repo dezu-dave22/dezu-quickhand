@@ -433,7 +433,7 @@ const RandomTimingGame = () => {
 
                 <div className="flex justify-center gap-5 w-1/2 mx-auto">
                     <button
-                        className="bg-blue-500 text-white px-6 py-4 rounded flex-1"
+                        className="bg-blue-500 text-white px-10 py-6 rounded-full flex-1 focus:outline-none text-4xl font-bold"
                         onClick={() => isMoving ? handleStop() : handleReset()}
                     >
                         { '按我'}
@@ -539,7 +539,10 @@ const RandomTimingGame = () => {
                         <div className="flex justify-end">
                             <button 
                                 className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-                                onClick={() => setShowSpeedModal(false)}
+                                onClick={() => {
+                                    setShowSpeedModal(false);
+                                    handleReset();
+                                }}
                             >
                                 確定
                             </button>
